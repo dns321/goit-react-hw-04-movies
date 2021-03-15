@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import './Cast.scss';
 
 export class Cast extends Component {
   state = {
-    cast: null,
+    cast: [],
   };
 
   async componentDidMount() {
@@ -16,7 +17,6 @@ export class Cast extends Component {
     const { data } = await axios.get(
       `/movie/${movieId}/credits?api_key=${API_KEY}&language=en-US`,
     );
-    console.log(data);
     this.setState({ ...data });
   }
 
@@ -24,19 +24,20 @@ export class Cast extends Component {
     const Base_url = 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
     const { cast } = this.state;
 
-    console.log(cast);
-
     return (
       <>
-        <div>Cast</div>
-        <ul>
-          {/* {cast.map(actor => (
-            <li kay={actor.id}>
-              <img src={`${Base_url}${actor.profile_path}`} alt="photo" />
-              <p>{actor.name}</p>
-              <p>{actor.character}</p>
+        <ul className="items-cast">
+          {cast.map(actor => (
+            <li key={actor.id} className="item-cast">
+              <img
+                src={`${Base_url}${actor.profile_path}`}
+                alt="photo"
+                width="200"
+              />
+              <h3 className="title-cast">{actor.name}</h3>
+              <p className="text-cast">Character: {actor.character}</p>
             </li>
-          ))} */}
+          ))}
         </ul>
       </>
     );

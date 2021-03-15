@@ -16,3 +16,18 @@
 .nav-link-activ {
   color: red;
 }
+
+.movies-card {
+  display: flex;
+  margin-top: 5px;
+}
+
+.movies-card-description {
+  margin-left: 10px;
+}
+
+.movies-information {
+  margin-top: 5px;
+  border-top: 2px solid grey;
+  border-bottom: 2px solid grey;
+}

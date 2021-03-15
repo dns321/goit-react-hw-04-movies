@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import MoviesList from '../Components/moviesList/MoviesList';
 
 export class HomePage extends Component {
   state = {
@@ -20,13 +20,9 @@ export class HomePage extends Component {
     const { films } = this.state;
 
     return (
-      <ul>
-        {films.map(film => (
-          <li key={film.id}>
-            <Link to={`/movies/${film.id}`}>{film.original_title}</Link>
-          </li>
-        ))}
-      </ul>
+      <>
+        <MoviesList films={films} />
+      </>
     );
   }
 }

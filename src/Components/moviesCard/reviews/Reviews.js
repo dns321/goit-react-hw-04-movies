@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import './Reviews.scss';
 
 export class Reviews extends Component {
   state = {
-    results: null,
+    results: [],
   };
 
   async componentDidMount() {
@@ -21,17 +22,21 @@ export class Reviews extends Component {
 
   render() {
     const { results } = this.state;
-    console.log(results);
 
     return (
       <>
-        Reviews
-        {/* {results.map(result => (
+        {results.length > 0 ? (
           <ul>
-            {result.author}
-            <li>{result.content}</li>
+            {results.map(result => (
+              <li key={result.author}>
+                <h3 className="title-reviews">Author: {result.author}</h3>
+                <p className="text-reviews">{result.content}</p>
+              </li>
+            ))}
           </ul>
-        ))} */}
+        ) : (
+          <p>We don't have any reviews forthis movie.</p>
+        )}
       </>
     );
   }
