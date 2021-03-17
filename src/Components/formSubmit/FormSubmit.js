@@ -34,6 +34,8 @@ export class FormSubmit extends Component {
               this.props.history.push({
                 pathname: this.props.location.pathname,
                 search: `query=${query}`,
+                query: `${query}`,
+                apdateList: this.props.apdateList,
               })
             }
           >

@@ -1,19 +1,30 @@
 import axios from 'axios';
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { NavLink, Route, withRouter } from 'react-router-dom';
-import Cast from '../Components/moviesCard/cast/Cast';
-import Reviews from '../Components/moviesCard/reviews/Reviews';
+// import Cast from '../Components/moviesCard/cast/Cast';
+// import Reviews from '../Components/moviesCard/reviews/Reviews';
 import routers from '../routes';
+import Loader from 'react-loader-spinner';
+
+const Cast = lazy(() =>
+  import('../Components/moviesCard/cast/Cast' /* webpackChunkName: "cast" */),
+);
+const Reviews = lazy(() =>
+  import(
+    '../Components/moviesCard/reviews/Reviews' /* webpackChunkName: "reviews" */
+  ),
+);
 
 export class MovieDetailsPage extends Component {
   state = {
     genres: [],
-    original_title: null,
-    overview: null,
-    poster_path: null,
-    release_date: null,
-    vote_average: null,
+    original_title: '',
+    overview: '',
+    poster_path: '',
+    release_date: '',
+    vote_average: '',
     from: '',
+    query: '',
   };
 
   async componentDidMount() {
@@ -26,14 +37,22 @@ export class MovieDetailsPage extends Component {
     const { data } = await axios.get(
       `/movie/${movieId}?api_key=${API_KEY}&language=en-US`,
     );
-    this.setState({ ...data });
-    this.setState({ from: this.props.location.state?.from });
+    this.setState({
+      ...data,
+      from: this.props.location.state?.from,
+      query: this.props.location.state?.query,
+      apdateList: this.props.location.apdateList,
+    });
   }
 
   handleGoBack = () => {
-    const { from } = this.state;
+    const { from, query, apdateList } = this.state;
+
+    console.log();
+
     const { history } = this.props;
     from ? history.push(from) : history.push(routers.home);
+    query && apdateList(query);
   };
 
   render() {
@@ -51,7 +70,7 @@ export class MovieDetailsPage extends Component {
     const date = `${release_date}`.split('-')[0];
     const score = vote_average * 10;
 
-    const Base_url = 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
+    const Base_url = 'https://image.tmdb.org/t/p/original';
 
     return (
       <>
@@ -91,14 +110,17 @@ export class MovieDetailsPage extends Component {
             </li>
           </ul>
         </div>
-        <Route
-          path={`${this.props.match.url}/cast`}
-          render={props => <Cast movieId={movieId} {...props} />}
-        ></Route>
-        <Route
-          path={`${this.props.match.url}/reviews`}
-          render={props => <Reviews movieId={movieId} {...props} />}
-        ></Route>
+
+        <Suspense fallback={<Loader />}>
+          <Route
+            path={`${this.props.match.url}/cast`}
+            render={props => <Cast movieId={movieId} {...props} />}
+          ></Route>
+          <Route
+            path={`${this.props.match.url}/reviews`}
+            render={props => <Reviews movieId={movieId} {...props} />}
+          ></Route>
+        </Suspense>
       </>
     );
   }

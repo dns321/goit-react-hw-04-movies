@@ -10,7 +10,6 @@ export class MoviesPage extends Component {
     films: [],
     page: 1,
     query: '',
-    total_pages: '',
     error: null,
     isLoading: false,
     showBtn: true,
@@ -18,6 +17,7 @@ export class MoviesPage extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.query !== this.state.query) {
+      console.log(this.state.query);
       this.fetchMovies();
     }
   }
@@ -46,7 +46,6 @@ export class MoviesPage extends Component {
       .then(response => {
         this.setState(prevState => ({
           films: [...prevState.films, ...response.data.results],
-          total_pages: response.data.total_pages,
           page: prevState.page + 1,
         }));
 
@@ -63,6 +62,11 @@ export class MoviesPage extends Component {
         }
         this.setState({ isLoading: false });
       });
+  };
+
+  updateListOnGoBack = value => {
+    this.setState({ query: value && value });
+    console.log(this.state.query);
   };
 
   windowScroll = () => {
@@ -84,7 +88,10 @@ export class MoviesPage extends Component {
 
     return (
       <>
-        <FormSubmit onSubmit={this.onChengeQuery} />
+        <FormSubmit
+          onSubmit={this.onChengeQuery}
+          apdateList={this.updateListOnGoBack}
+        />
         <MoviesList films={films} />
         {error && <h2>Something went wrong</h2>}
         {isLoading && <Loader />}
