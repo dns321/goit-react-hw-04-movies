@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import './Reviews.scss';
+import newsApi from '../../../services/ApiServices';
+import PropTypes from 'prop-types';
 
 export class Reviews extends Component {
   state = {
@@ -8,16 +9,11 @@ export class Reviews extends Component {
   };
 
   async componentDidMount() {
-    const API_KEY = '69b18394d8ba2f066276fc5ba1d70545';
-    const BASE_URL = 'https://api.themoviedb.org/3';
     const movieId = this.props.movieId;
 
-    axios.defaults.baseURL = BASE_URL;
-
-    const { data } = await axios.get(
-      `/movie/${movieId}/reviews?api_key=${API_KEY}&language=en-US&page=1`,
-    );
-    this.setState({ ...data });
+    newsApi.fetchReviews(movieId).then(data => {
+      this.setState({ ...data });
+    });
   }
 
   render() {
@@ -41,5 +37,9 @@ export class Reviews extends Component {
     );
   }
 }
+
+Reviews.propTypes = {
+  movieId: PropTypes.string.isRequired,
+};
 
 export default Reviews;

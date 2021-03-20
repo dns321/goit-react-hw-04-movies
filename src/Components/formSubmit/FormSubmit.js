@@ -35,7 +35,6 @@ export class FormSubmit extends Component {
                 pathname: this.props.location.pathname,
                 search: `query=${query}`,
                 query: `${query}`,
-                apdateList: this.props.apdateList,
               })
             }
           >

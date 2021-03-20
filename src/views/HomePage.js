@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import MoviesList from '../Components/moviesList/MoviesList';
+import newsApi from '../services/ApiServices';
 
 export class HomePage extends Component {
   state = {
@@ -8,12 +8,9 @@ export class HomePage extends Component {
   };
 
   async componentDidMount() {
-    const API_KEY = '69b18394d8ba2f066276fc5ba1d70545';
-    const BASE_URL = 'https://api.themoviedb.org/3';
-    axios.defaults.baseURL = BASE_URL;
-
-    const { data } = await axios.get(`/trending/movie/day?api_key=${API_KEY}`);
-    this.setState({ films: data.results });
+    newsApi.fetchMoviesDay().then(data => {
+      this.setState({ films: data.results });
+    });
   }
 
   render() {

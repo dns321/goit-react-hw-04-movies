@@ -16,15 +16,15 @@ const MoviesList = ({ films, location }) => {
               apdateList: location.apdateList,
               pathname: `/movies/${film.id}`,
               state: {
-                from: location.search
-                  ? location.pathname + location.search
-                  : location.pathname,
+                from: location.pathname,
                 query: location.query,
               },
             }}
           >
             <img
-              src={film.poster_path && `${Base_url}${film.poster_path}`}
+              src={
+                film.poster_path ? `${Base_url}${film.poster_path}` : defaultImg
+              }
               alt="poster"
               width="200"
               height="300"
@@ -35,14 +35,6 @@ const MoviesList = ({ films, location }) => {
       ))}
     </ul>
   );
-};
-
-MoviesList.defaultProps = {
-  films: [
-    {
-      poster_path: defaultImg,
-    },
-  ],
 };
 
 MoviesList.propTypes = {

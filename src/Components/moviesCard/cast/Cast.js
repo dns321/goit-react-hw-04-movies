@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import './Cast.scss';
+import newsApi from '../../../services/ApiServices';
+import defaultImg from '../../../img/default-image.png';
+import PropTypes from 'prop-types';
 
 export class Cast extends Component {
   state = {
@@ -8,16 +10,11 @@ export class Cast extends Component {
   };
 
   async componentDidMount() {
-    const API_KEY = '69b18394d8ba2f066276fc5ba1d70545';
-    const BASE_URL = 'https://api.themoviedb.org/3';
     const movieId = this.props.movieId;
 
-    axios.defaults.baseURL = BASE_URL;
-
-    const { data } = await axios.get(
-      `/movie/${movieId}/credits?api_key=${API_KEY}&language=en-US`,
-    );
-    this.setState({ ...data });
+    newsApi.fetchCast(movieId).then(data => {
+      this.setState({ ...data });
+    });
   }
 
   render() {
@@ -30,9 +27,14 @@ export class Cast extends Component {
           {cast.map(actor => (
             <li key={actor.id} className="item-cast">
               <img
-                src={`${Base_url}${actor.profile_path}`}
+                src={
+                  actor.profile_path
+                    ? `${Base_url}${actor.profile_path}`
+                    : defaultImg
+                }
                 alt="photo"
                 width="200"
+                height="300"
               />
               <h3 className="title-cast">{actor.name}</h3>
               <p className="text-cast">Character: {actor.character}</p>
@@ -43,5 +45,9 @@ export class Cast extends Component {
     );
   }
 }
+
+Cast.propTypes = {
+  movieId: PropTypes.string.isRequired,
+};
 
 export default Cast;

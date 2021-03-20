@@ -1,19 +1,11 @@
-import axios from 'axios';
 import React, { Component, Suspense, lazy } from 'react';
-import { NavLink, Route, withRouter } from 'react-router-dom';
-// import Cast from '../Components/moviesCard/cast/Cast';
-// import Reviews from '../Components/moviesCard/reviews/Reviews';
-import routers from '../routes';
+import { Route, withRouter } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
-
-const Cast = lazy(() =>
-  import('../Components/moviesCard/cast/Cast' /* webpackChunkName: "cast" */),
-);
-const Reviews = lazy(() =>
-  import(
-    '../Components/moviesCard/reviews/Reviews' /* webpackChunkName: "reviews" */
-  ),
-);
+import defaultImg from '../img/default-image.png';
+import Navigation from '../Components/navigation/Navigation';
+import { castReviewsRoutes } from '../routes/castReviewsRoutes';
+import newsApi from '../services/ApiServices';
+import PropTypes from 'prop-types';
 
 export class MovieDetailsPage extends Component {
   state = {
@@ -28,31 +20,28 @@ export class MovieDetailsPage extends Component {
   };
 
   async componentDidMount() {
-    const API_KEY = '69b18394d8ba2f066276fc5ba1d70545';
-    const BASE_URL = 'https://api.themoviedb.org/3';
     const movieId = this.props.match.params.movieId;
 
-    axios.defaults.baseURL = BASE_URL;
-
-    const { data } = await axios.get(
-      `/movie/${movieId}?api_key=${API_KEY}&language=en-US`,
-    );
-    this.setState({
-      ...data,
-      from: this.props.location.state?.from,
-      query: this.props.location.state?.query,
-      apdateList: this.props.location.apdateList,
+    newsApi.fetchMoviesDetail(movieId).then(data => {
+      this.setState({
+        ...data,
+        from: this.props.location.state?.from,
+        query: this.props.location.state?.query,
+      });
     });
   }
 
   handleGoBack = () => {
-    const { from, query, apdateList } = this.state;
-
-    console.log();
+    const { from, query } = this.state;
 
     const { history } = this.props;
-    from ? history.push(from) : history.push(routers.home);
-    query && apdateList(query);
+    from && query
+      ? history.push({
+          pathname: from,
+          search: `query=${query}`,
+          query,
+        })
+      : history.push('/');
   };
 
   render() {
@@ -83,7 +72,11 @@ export class MovieDetailsPage extends Component {
           Go back
         </button>
         <div className="movies-card">
-          <img src={`${Base_url}${poster_path}`} alt="poster" width="200" />
+          <img
+            src={poster_path ? `${Base_url}${poster_path}` : defaultImg}
+            alt="poster"
+            width="200"
+          />
           <div className="movies-card-description">
             <h2>
               {original_title} ({date})
@@ -101,29 +94,26 @@ export class MovieDetailsPage extends Component {
         </div>
         <div className="movies-information">
           <p>Additional information</p>
-          <ul>
-            <li>
-              <NavLink to={`${this.props.match.url}/cast`}>Cast</NavLink>
-            </li>
-            <li>
-              <NavLink to={`${this.props.match.url}/reviews`}>Reviews</NavLink>
-            </li>
-          </ul>
+          <Navigation routes={castReviewsRoutes} match={this.props.match.url} />
         </div>
 
         <Suspense fallback={<Loader />}>
-          <Route
-            path={`${this.props.match.url}/cast`}
-            render={props => <Cast movieId={movieId} {...props} />}
-          ></Route>
-          <Route
-            path={`${this.props.match.url}/reviews`}
-            render={props => <Reviews movieId={movieId} {...props} />}
-          ></Route>
+          {castReviewsRoutes.map(({ path, component: MyComponent }) => (
+            <Route
+              key={path}
+              path={`${this.props.match.url}${path}`}
+              render={props => <MyComponent movieId={movieId} {...props} />}
+            ></Route>
+          ))}
         </Suspense>
       </>
     );
   }
 }
+
+MovieDetailsPage.propTypes = {
+  location: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
+};
 
 export default MovieDetailsPage;

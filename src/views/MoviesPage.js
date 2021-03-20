@@ -1,9 +1,10 @@
-import axios from 'axios';
 import React, { Component } from 'react';
 import MoviesList from '../Components/moviesList/MoviesList';
 import Button from '../Components/button/Button';
 import Loader from '../Components/loader/Loader';
 import FormSubmit from '../Components/formSubmit/FormSubmit';
+import newApi from '../services/ApiServices';
+import PropTypes from 'prop-types';
 
 export class MoviesPage extends Component {
   state = {
@@ -15,9 +16,28 @@ export class MoviesPage extends Component {
     showBtn: true,
   };
 
+  componentDidMount() {
+    const { query } = this.props.location;
+    const { page } = this.state;
+    const options = { query, page };
+
+    this.props.location.query &&
+      newApi
+        .fetchMoviesPage(options)
+        .then(() => {
+          this.setState(() => ({
+            query: this.props.location.query,
+          }));
+
+          this.windowScroll();
+        })
+        .finally(() => {
+          this.setState({ isLoading: false });
+        });
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.query !== this.state.query) {
-      console.log(this.state.query);
       this.fetchMovies();
     }
   }
@@ -32,24 +52,20 @@ export class MoviesPage extends Component {
   };
 
   fetchMovies = () => {
-    const { query, page } = this.state;
-    const API_KEY = '69b18394d8ba2f066276fc5ba1d70545';
-    const BASE_URL = 'https://api.themoviedb.org/3';
-    axios.defaults.baseURL = BASE_URL;
-
     this.setState({ isLoading: true });
+    const { query, page } = this.state;
+    const options = { query, page };
 
-    axios
-      .get(
-        `/search/movie?api_key=${API_KEY}&language=en-US&query=${query}&page=${page}&include_adult=false`,
-      )
-      .then(response => {
+    newApi
+      .fetchMoviesPage(options)
+      .then(data => {
         this.setState(prevState => ({
-          films: [...prevState.films, ...response.data.results],
+          films: [...prevState.films, ...data.results],
           page: prevState.page + 1,
+          query: this.props.location.query,
         }));
 
-        this.lengthArr(response.data.results.length);
+        this.lengthArr(data.results.length);
 
         this.windowScroll();
       })
@@ -62,11 +78,6 @@ export class MoviesPage extends Component {
         }
         this.setState({ isLoading: false });
       });
-  };
-
-  updateListOnGoBack = value => {
-    this.setState({ query: value && value });
-    console.log(this.state.query);
   };
 
   windowScroll = () => {
@@ -88,10 +99,7 @@ export class MoviesPage extends Component {
 
     return (
       <>
-        <FormSubmit
-          onSubmit={this.onChengeQuery}
-          apdateList={this.updateListOnGoBack}
-        />
+        <FormSubmit onSubmit={this.onChengeQuery} />
         <MoviesList films={films} />
         {error && <h2>Something went wrong</h2>}
         {isLoading && <Loader />}
@@ -100,5 +108,9 @@ export class MoviesPage extends Component {
     );
   }
 }
+
+MoviesPage.propTypes = {
+  location: PropTypes.object.isRequired,
+};
 
 export default MoviesPage;
