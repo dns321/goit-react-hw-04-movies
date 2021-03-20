@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/Components/moviesCard/reviews/Reviews.scss"],"names":[],"mappings":"AAAA,eACE,eAAgB,CAChB,eAAgB,CACjB,cAGC,YAAa","file":"reviews.3c646ded.chunk.css","sourcesContent":[".title-reviews {\n  margin-top: 20px;\n  margin-bottom: 0;\n}\n\n.text-reviews {\n  margin: 5px 0;\n}\n"]}
