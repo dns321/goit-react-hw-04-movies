@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import './FormSubmit.scss';
 
 export class FormSubmit extends Component {
   state = {
@@ -24,7 +25,7 @@ export class FormSubmit extends Component {
         <form action="" onSubmit={this.handleSubmit}>
           <input
             type="text"
-            placeholder="Serch movies"
+            placeholder="Input movies"
             value={query}
             onChange={this.handleChange}
           />

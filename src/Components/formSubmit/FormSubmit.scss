@@ -1,0 +1,38 @@
+form {
+  margin: 10px 15px;
+}
+input[type='text'] {
+  width: 130px;
+  box-sizing: border-box;
+  border: 0.5px solid black;
+  border-radius: 5px;
+  font-size: 16px;
+  color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 15px 12px 15px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+
+input[type='text']::placeholder {
+  color: rgb(0, 0, 0);
+}
+
+input[type='text']:focus {
+  width: 40%;
+  background-color: blue;
+  border: 2px solid rgb(0, 0, 0);
+}
+input[type='text']:focus::placeholder {
+  color: white;
+}
+
+button[type='submit'] {
+  cursor: pointer;
+  margin-left: 5px;
+  padding: 12px 15px 12px 15px;
+  background-color: blue;
+  border: 2px solid rgb(0, 0, 0);
+  border-radius: 5px;
+}

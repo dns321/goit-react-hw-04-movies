@@ -64,36 +64,38 @@ export class MovieDetailsPage extends Component {
     return (
       <>
         {/* <h2>Cторінка фільма {this.props.match.params.movieId}</h2> */}
-        <button
-          type="button"
-          onClick={this.handleGoBack}
-          // disabled={!from && 'disabled'}
-        >
-          Go back
-        </button>
-        <div className="movies-card">
-          <img
-            src={poster_path ? `${Base_url}${poster_path}` : defaultImg}
-            alt="poster"
-            width="200"
-          />
-          <div className="movies-card-description">
-            <h2>
-              {original_title} ({date})
-            </h2>
-            <p>User Score: {score}%</p>
-            <h3>Overview</h3>
-            <p>{overview}</p>
-            <h3>Genres</h3>
-            <ul>
-              {genres.map(genre => (
-                <li key={genre.id}>{genre.name}</li>
-              ))}
-            </ul>
+        <div className="movie">
+          <button
+            type="button"
+            onClick={this.handleGoBack}
+            // disabled={!from && 'disabled'}
+          >
+            Go back
+          </button>
+          <div className="movies-card">
+            <img
+              src={poster_path ? `${Base_url}${poster_path}` : defaultImg}
+              alt="poster"
+              width="200"
+            />
+            <div className="movies-card-description">
+              <h2>
+                {original_title} ({date})
+              </h2>
+              <p>User Score: {score}%</p>
+              <h3>Overview</h3>
+              <p>{overview}</p>
+              <h3>Genres</h3>
+              <ul>
+                {genres.map(genre => (
+                  <li key={genre.id}>{genre.name}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
         <div className="movies-information">
-          <p>Additional information</p>
+          <p className="movies-information-text">Additional information</p>
           <Navigation routes={castReviewsRoutes} match={this.props.match.url} />
         </div>
 

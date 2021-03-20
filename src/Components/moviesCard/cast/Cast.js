@@ -24,22 +24,26 @@ export class Cast extends Component {
     return (
       <>
         <ul className="items-cast">
-          {cast.map(actor => (
-            <li key={actor.id} className="item-cast">
-              <img
-                src={
-                  actor.profile_path
-                    ? `${Base_url}${actor.profile_path}`
-                    : defaultImg
-                }
-                alt="photo"
-                width="200"
-                height="300"
-              />
-              <h3 className="title-cast">{actor.name}</h3>
-              <p className="text-cast">Character: {actor.character}</p>
-            </li>
-          ))}
+          {cast.length > 0 ? (
+            cast.map(actor => (
+              <li key={actor.id} className="item-cast">
+                <img
+                  src={
+                    actor.profile_path
+                      ? `${Base_url}${actor.profile_path}`
+                      : defaultImg
+                  }
+                  alt="photo"
+                  width="200"
+                  height="300"
+                />
+                <h3 className="title-cast">{actor.name}</h3>
+                <p className="text-cast">Character: {actor.character}</p>
+              </li>
+            ))
+          ) : (
+            <p>We don't have any cast forthis movie.</p>
+          )}
         </ul>
       </>
     );

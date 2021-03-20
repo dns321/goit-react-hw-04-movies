@@ -9,7 +9,7 @@ const Navigation = ({ routes, match = '' }) => {
         {routes.map(
           ({ name, path, exact, list }) =>
             list && (
-              <li className="naw-list-item" key={path}>
+              <li className="nav-list-item" key={path}>
                 <NavLink
                   exact={exact}
                   to={`${match}${path}`}

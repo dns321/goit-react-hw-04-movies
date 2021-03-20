@@ -1,20 +1,36 @@
 @import 'styles/shared.scss';
 
 .nav-list-items {
+  margin: 0;
   display: flex;
+  justify-content: center;
   list-style: none;
+  font-size: 25px;
 }
 
-.naw-list-item:not(:last-child) {
-  margin-right: 25px;
+.nav-list-item {
+  padding: 5px;
+  background-color: rgb(37, 37, 168);
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+.nav-list-item:not(:last-child) {
+  margin-right: 45px;
 }
 
 .nav-link {
+  color: white;
   text-decoration: none;
 }
 
 .nav-link-activ {
   color: red;
+}
+
+.movie {
+  padding: 10px 10px;
+  background-color: rgb(220, 227, 247);
 }
 
 .movies-card {
@@ -27,7 +43,24 @@
 }
 
 .movies-information {
-  margin-top: 5px;
+  display: flex;
+  padding: 5px 10px;
+  background-color: blue;
   border-top: 2px solid grey;
   border-bottom: 2px solid grey;
+}
+
+.movies-information-text {
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-size: 24px;
+  color: white;
+}
+
+button[type='button'] {
+  cursor: pointer;
+  padding: 5px;
+  background-color: blue;
+  border: 2px solid black;
+  border-radius: 5px;
 }
